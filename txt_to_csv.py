@@ -1,15 +1,33 @@
+"""
+Usage:
+  # Create train labels:
+  python txt_to_csv.py train
+  
+  # Create test labels:
+  python txt_to_csv.py test
+"""
 import os
 import numpy as np
 from PIL import Image
+import sys
 
 root = "./data"
-train_imgs = os.listdir(root + "/train")
-with open("train_labels.csv", "w") as f:
+type = "train"
+arguments = sys.argv
+length = len(arguments)
+
+if(length == 2):
+    type = arguments[1]
+elif(length > 2):
+    raise Exception("Too many arguments")
+
+imgs = os.listdir(root + "/" + type)
+with open(type + "_labels.csv", "w") as f:
     f.write("filename,width,height,class,xmin,ymin,xmax,ymax\n")
 f.close()
 
-for img in train_imgs:
-    image = Image.open(root + "/train/" + img)
+for img in imgs:
+    image = Image.open(root + "/" + type + "/" + img)
     height, width = np.array(image).shape[:2]
     annotations_file = os.path.join(root + "/annotations/" + img + ".txt")
     annotations = ""
@@ -28,6 +46,6 @@ for img in train_imgs:
         xmax = str(int(xmin) + int(values[3]))
         ymax = str(int(ymin) + int(values[4]))
 
-        with open("train_labels.csv", "a") as f:
+        with open(type + "_labels.csv", "a") as f:
             f.write(img + "," + str(width) + "," + str(height) + "," + label + "," + xmin + "," + ymin + "," + xmax+ "," + ymax + "\n")
         f.close()
