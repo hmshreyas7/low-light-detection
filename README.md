@@ -17,12 +17,14 @@ where `annotations` contains all the annotation text files, `test` contains ~20%
 ## Converting annotations to CSV
 The annotations are converted to CSV using `txt_to_csv.py` so that they can be used to generate the required TFRecord files. From within the repo folder (/low-light-detection), run:
 
-`python txt_to_csv.py`
+`python txt_to_csv.py train`
 
-This will generate `train_labels.csv`. Run the same script after modifying all strings containing "train" to "test" to generate `test_labels.csv`. Then, move both CSV files to `data`.
+`python txt_to_csv.py test`
+
+The generated CSV files should then be moved to `data`.
 
 ## Generating TFRecord files
-From within the repo folder, run:
+Next, run the following:
 
 `python generate_tfrecord.py --csv_input=data/train_labels.csv --image_dir=data/train --output_path=train.record`
 
